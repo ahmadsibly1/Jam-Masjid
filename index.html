@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Prayer Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="bootstrap.min.css" rel="stylesheet">
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+  
+  <!-- Template Main CSS File -->
+  <link href="style.css" rel="stylesheet">
+  
+  <!-- PRAYER TIME -->
+  <script type="text/javascript" src="PrayTimes.js"></script>
+	
+  <script type="text/javascript">
+		
+		function waktuSholat() {
+  			var today = new Date();
+  			var h = today.getHours();
+  			var m = today.getMinutes();
+  			var s = today.getSeconds();
+  			h = checkTime(h);
+  			m = checkTime(m);
+  			s = checkTime(s);
+  			
+  			var date = today.getDate();
+  			var month = today.getMonth();
+  			var montharr =["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  			month=montharr[month];
+  			var year = today.getFullYear();
+	  
+	  		var day = today.getDay();
+	  		var dayarr =["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+	  		day=dayarr[day];
+  			
+  			document.getElementById('jam').innerHTML = h + ":" + m + ":" + s;
+  			document.getElementById('hari').innerHTML = day+",";
+  			document.getElementById('tgl').innerHTML = date+" "+month+" "+year;
+  			
+  			
+  			// MANUAL SETTINGS --------------------------------------------------------
+  			prayTimes.setMethod('MWL'); // perhitungan
+  			var Ptimes = prayTimes.getTimes(today, [-6.2, 106.8], 7); // jakarta (longitude, Latitude, Time Zone)
+  			// ------------------------------------------------------------------------
+  			
+  			document.getElementById('subuh').innerHTML =   Ptimes.fajr;
+  			document.getElementById('terbit').innerHTML =  Ptimes.sunrise;
+  			document.getElementById('zuhur').innerHTML =   Ptimes.dhuhr;
+  			document.getElementById('ashar').innerHTML =   Ptimes.asr;
+  			document.getElementById('maghrib').innerHTML = Ptimes.maghrib;
+  			document.getElementById('isya').innerHTML =    Ptimes.isha;
+  			
+			// Azan
+  			
+  			var waktu = h + ":" + m;
+
+  			if (waktu == Ptimes.fajr) {
+  				$('#ModalAzan').modal('show');
+
+				setTimeout(function() {
+    				$('#ModalAzan').modal('hide');
+				}, 60000);
+			}
+  			
+  			if (waktu == Ptimes.dhuhr) {
+  				$('#ModalAzan').modal('show');
+
+				setTimeout(function() {
+    				$('#ModalAzan').modal('hide');
+				}, 60000);
+			}
+  			
+			if (waktu == Ptimes.asr) {
+  				$('#ModalAzan').modal('show');
+
+				setTimeout(function() {
+    				$('#ModalAzan').modal('hide');
+				}, 60000);
+			}
+			
+			if (waktu == Ptimes.maghrib) {
+  				$('#ModalAzan').modal('show');
+
+				setTimeout(function() {
+    				$('#ModalAzan').modal('hide');
+				}, 60000);
+			}
+			
+			if (waktu == Ptimes.isha) {
+  				$('#ModalAzan').modal('show');
+
+				setTimeout(function() {
+    				$('#ModalAzan').modal('hide');
+				}, 60000);
+			}
+			
+			// colors
+			
+			var akhirwaktu = "23:59";
+			
+			if (waktu  >= Ptimes.fajr && waktu < Ptimes.sunrise) {
+  				document.getElementById('csubuh').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('csubuh').style.backgroundColor = "white";
+			}
+			
+			if (waktu  >= Ptimes.sunrise && waktu < Ptimes.dhuhr) {
+  				document.getElementById('cterbit').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('cterbit').style.backgroundColor = "white";
+			}
+			
+			if (waktu  >= Ptimes.dhuhr && waktu < Ptimes.asr) {
+  				document.getElementById('czuhur').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('czuhur').style.backgroundColor = "white";
+			}
+			
+			if (waktu  >= Ptimes.asr && waktu < Ptimes.maghrib) {
+  				document.getElementById('cashar').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('cashar').style.backgroundColor = "white";
+			}
+			
+			if (waktu  >= Ptimes.maghrib && waktu < Ptimes.isha) {
+  				document.getElementById('cmaghrib').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('cmaghrib').style.backgroundColor = "white";
+			}
+			if (waktu  >= Ptimes.isha && waktu < akhirwaktu) {
+  				document.getElementById('cisya').style.backgroundColor = "red";
+			} else {
+  				document.getElementById('cisya').style.backgroundColor = "white";
+			}
+  			
+  			var t = setTimeout(waktuSholat, 1000);
+		}
+		function checkTime(i) {
+  			if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+  			return i;
+		}
+		
+   </script>
+	
+</head>
+
+<body onload="waktuSholat()">
+
+<div class="header">
+  <div class="row">
+		<div class="col-sm-3">
+			<div class="hari text-left" id="hari"></div>
+			<div class="tgl text-left" id="tgl"></div>
+		</div>
+  		<div class="col-sm-6 text-center ">
+  			<img src="img/logo.png" width="120" height="120"> 
+  		</div>
+  		<div class="col-sm-3 text-right">
+  			<div class="jam" id="jam"></div>
+  		</div>
+  	</div>
+</div>
+
+<div class="isi">
+	
+	<!-- Modal Azan-->
+  	<div onshow="playAudio()" class="modal fade" id="ModalAzan" role="dialog">
+    	<div class="modal-dialog modal-dialog-centered">
+      		<div class="modal-content">
+        		<div class="modal-header" style="padding:30px 90px;">
+          			<h2>Memasuki Waktu Azan</h2>
+        		</div>
+        		<div class="modal-body">
+          			<img src="img/azan.jpg" > 
+        		</div>
+      		</div>
+    	</div> 
+    </div>
+    
+</div>
+
+<div class="footer">
+      
+<div class="container-fluid text-center">
+  <div class="row">          
+    <div id="csubuh" class="col-sm border m-2"> 
+    	<img src="img/moon.png" class="rounded-circle" alt="" width="64" height="64"> 
+      	<h3>SUBUH</h3>
+      	<h1><div class="jam2" id="subuh"></div></h1>
+    </div>
+    <div id="cterbit" class="col-sm border m-2"> 
+    	<img src="img/sunrise.png" class="rounded-circle" alt="" width="64" height="64"> 
+      	<h3>TERBIT</h3>
+      	<h1><div class="jam2" id="terbit"></div></h1>
+    </div>
+    <div id="czuhur" class="col-sm border m-2"> 
+    	<img src="img/sun.png" class="rounded-circle" alt="" width="64" height="64"> 
+      	<h3>ZUHUR</h3>        
+      	<h1><div class="jam2" id="zuhur"></div></h1>
+    </div>
+    <div id="cashar" class="col-sm border m-2"> 
+    	<img src="img/sun.png" class="rounded-circle" alt="" width="64" height="64">
+      	<h3>ASHAR</h3>
+      	<h1><div class="jam2" id="ashar"></div></h1>
+    </div>
+    <div id="cmaghrib" class="col-sm border m-2"> 
+    	<img src="img/sunrise.png" class="rounded-circle" alt="" width="64" height="64"> 
+      	<h3>MAGHRIB</h3>
+      	<h1><div class="jam2" id="maghrib"></div></h1>
+    </div>
+    <div id="cisya" class="col-sm border m-2"> 
+    	<img src="img/moon.png" class="rounded-circle" alt="" width="64" height="64"> 
+      	<h3>ISYA</h3>        
+      	<h1><div class="jam2" id="isya"></div></h1>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
